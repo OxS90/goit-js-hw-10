@@ -9,10 +9,6 @@ function showFetchError() {
   Notify.failure('Oops! Something went wrong! Try reloading the page!');
 }
 
-const selectEl = document.querySelector('.breed-select');
-const loaderEl = document.querySelector('.loader');
-const errorEl = document.querySelector('.error');
-
 function showElement(el) {
   el.style.display = 'block';
 }
@@ -20,17 +16,6 @@ function showElement(el) {
 function hideElement(el) {
   el.style.display = 'none';
 }
-// Initial state: hide selectEl and show loaderEl, hide errorEl
-hideElement(selectEl);
-showElement(loaderEl);
-errorEl.innerHTML = '';
-loaderEl.innerHTML = '';
-
-// Delay the appearance of selectEl and hide loaderEl after 2 seconds
-setTimeout(function () {
-  showElement(selectEl);
-  hideElement(loaderEl);
-}, 1000);
 
 // function pentru fetchBreeds
 function fetchBreeds() {
@@ -38,24 +23,16 @@ function fetchBreeds() {
   return axios
     .get('https://api.thecatapi.com/v1/breeds')
     .then(response => response.data)
-    .catch(error => {
-      console.error('Error fetching cat:', error);
-      showFetchError();
-      // return [];
-    });
+    .catch(showFetchError);
 }
 // function pentru fetch imagini by breed
-function fetchCatByBreed(breed) {
+function fetchCatByBreed(breedId) {
   // actualizam url pentru a include identificatorul rasei
-  const apiUrl = `https://api.thecatapi.com/v1/images/search?breed_ids=${breed}`;
+  const apiUrl = `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`;
   return axios
     .get(apiUrl)
     .then(response => response.data[0])
-    .catch(error => {
-      console.error('Error fetching cat:', error);
-      showFetchError();
-      // return null;
-    });
+    .catch(showFetchError);
 }
 export {
   fetchBreeds,
